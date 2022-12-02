@@ -1,6 +1,8 @@
+#! /usr/bin/env factor -roots=.
+
 USING: kernel sequences prettyprint io.files
     io.encodings.utf8 splitting parser sorting math.order math
-    locals ;
+    locals advent.tools ;
 IN: advent.day1
 
 : parse-numbers ( seq -- seq ) [ parse-number ] map ;
@@ -11,9 +13,6 @@ IN: advent.day1
 
 : part-one ( seq -- n ) backpack-items backpack-totals supremum ;
 : part-two ( seq -- n ) backpack-items backpack-totals [ >=< ] sort first3 + + ;
-
-: load-input ( x -- seq ) utf8 file-lines ;
-:: filename ( day input -- x ) { "advent" day input } "/" join ;
 
 :: solve ( day input -- ) day input filename load-input dup
     part-one . part-two . ;
