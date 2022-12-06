@@ -37,12 +37,7 @@ TUPLE: command amount from to ;
         to push
     ] times ;
 
-:: run-command ( from to amount -- )
-    from
-    to
-    amount move-boxes ;
-
-:: run-command-2 ( from to amount -- )
+:: move-box-batch ( from to amount -- )
     [let V{ } :> temp
         from temp amount move-boxes
         temp to amount move-boxes
@@ -62,8 +57,8 @@ TUPLE: command amount from to ;
 :: run-steps ( puzzle strategy -- puzzle ) puzzle dup steps>> [ strategy execute-command ] each ;
 : stack-tops ( puzzle -- seq ) stacks>> [ ?last ] map sift >string ;
 
-: part-one ( seq -- n ) initialize-puzzle [ run-command ] run-steps stack-tops ;
-: part-two ( seq -- n ) initialize-puzzle [ run-command-2 ] run-steps stack-tops ;
+: part-one ( seq -- n ) initialize-puzzle [ move-boxes ] run-steps stack-tops ;
+: part-two ( seq -- n ) initialize-puzzle [ move-box-batch ] run-steps stack-tops ;
 
 :: solve ( day input -- ) day input filename load-input dup
     part-one . part-two . ;
