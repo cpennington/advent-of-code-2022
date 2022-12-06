@@ -51,35 +51,22 @@ TUPLE: command amount from to ;
         temp to amount move-boxes
     ] ;
 
-:: execute-command ( puzzle command -- puzzle )
+:: execute-command ( puzzle command strategy -- puzzle )
     puzzle
     [| stacks |
         command
         [ from>> stacks pick-stack ]
         [ to>> stacks pick-stack ]
         [ amount>> ]
-        tri run-command
+        tri strategy call( from to amount -- )
         stacks
     ] change-stacks ;
 
-:: execute-command-2 ( puzzle command -- puzzle )
-    puzzle
-    [| stacks |
-        command 
-        [ from>> stacks pick-stack ]
-        [ to>> stacks pick-stack ]
-        [ amount>> ]
-        tri run-command-2
-        stacks
-    ] change-stacks ;
-
-: run-steps ( puzzle -- puzzle ) dup steps>> [ execute-command ] each ;
-: run-steps-2 ( puzzle -- puzzle ) dup steps>> [ execute-command-2 ] each ;
-
+:: run-steps ( puzzle strategy -- puzzle ) puzzle dup steps>> [ strategy execute-command ] each ;
 : stack-tops ( puzzle -- seq ) stacks>> [ ?last ] map sift >string ;
 
-: part-one ( seq -- n ) initialize-puzzle run-steps stack-tops ;
-: part-two ( seq -- n ) initialize-puzzle run-steps-2 stack-tops ;
+: part-one ( seq -- n ) initialize-puzzle [ run-command ] run-steps stack-tops ;
+: part-two ( seq -- n ) initialize-puzzle [ run-command-2 ] run-steps stack-tops ;
 
 :: solve ( day input -- ) day input filename load-input dup
     part-one . part-two . ;
