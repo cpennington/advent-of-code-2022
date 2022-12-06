@@ -32,13 +32,10 @@ TUPLE: command amount from to ;
 : pick-stack ( n stacks -- stack ) [ 1 - ] dip nth ;
 
 :: move-boxes ( from to amount -- )
-    amount 0 >
-    [ from pop
-      to push
-      from to
-      amount 1 -
-      move-boxes ]
-    when ;
+    amount [
+        from pop
+        to push
+    ] times ;
 
 :: run-command ( from to amount -- )
     from
