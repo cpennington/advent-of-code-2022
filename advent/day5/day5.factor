@@ -40,23 +40,38 @@ TUPLE: command amount from to ;
       move-boxes ]
     when ;
 
-:: run-command ( stacks from to amount -- stacks )
-    from stacks pick-stack
-    to stacks pick-stack
-    amount move-boxes
-    stacks ;
+:: run-command ( from to amount -- )
+    from
+    to
+    amount move-boxes ;
 
-:: run-command-2 ( stacks from to amount -- stacks )
+:: run-command-2 ( from to amount -- )
     [let V{ } :> temp
-        from stacks pick-stack temp amount move-boxes
-        temp to stacks pick-stack amount move-boxes
-    ] stacks ;
+        from temp amount move-boxes
+        temp to amount move-boxes
+    ] ;
 
 :: execute-command ( puzzle command -- puzzle )
-    puzzle [ command [ from>> ] [ to>> ] [ amount>> ] tri run-command ] change-stacks ;
+    puzzle
+    [| stacks |
+        command
+        [ from>> stacks pick-stack ]
+        [ to>> stacks pick-stack ]
+        [ amount>> ]
+        tri run-command
+        stacks
+    ] change-stacks ;
 
 :: execute-command-2 ( puzzle command -- puzzle )
-    puzzle [ command [ from>> ] [ to>> ] [ amount>> ] tri run-command-2 ] change-stacks ;
+    puzzle
+    [| stacks |
+        command 
+        [ from>> stacks pick-stack ]
+        [ to>> stacks pick-stack ]
+        [ amount>> ]
+        tri run-command-2
+        stacks
+    ] change-stacks ;
 
 : run-steps ( puzzle -- puzzle ) dup steps>> [ execute-command ] each ;
 : run-steps-2 ( puzzle -- puzzle ) dup steps>> [ execute-command-2 ] each ;
