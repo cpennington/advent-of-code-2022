@@ -20,7 +20,7 @@ TUPLE: grid map { height integer } { width integer } ;
     [ col row grid p call( col row grid -- n ) ]
     [ default ]
     if ;
-: height ( col row grid -- n ) [ map>> nth nth parse-digit ] 0 if-in-grid ;
+: height ( col row grid -- n ) [ map>> nth nth parse-digit ] -1 if-in-grid ;
 :: look-north ( col row grid -- seq ) col 0 (a,b] [ row 2array ] map ;
 :: look-south ( col row grid -- seq ) col grid width>> (a,b) [ row 2array ] map ;
 :: look-east ( col row grid -- seq ) row 0 (a,b] [ col swap 2array ] map ;
@@ -32,49 +32,60 @@ TUPLE: grid map { height integer } { width integer } ;
     [ look-west ]
 } 3cleave 4array ;
 
-MEMO:: max-north ( col row grid -- n )
-    col row 1 - grid [ height ] [ max-north ] 3bi max ;
-
-MEMO:: max-south ( col row grid -- n )
-    col row 1 + grid [ height ] [ max-south ] 3bi max ;
-
-MEMO:: max-east ( col row grid -- n )
-    col 1 + row grid [ height ] [ max-east ] 3bi max ;
-
-MEMO:: max-west ( col row grid -- n )
-    col 1 - row grid [ height ] [ max-west ] 3bi max ;
-
-:: visible? ( col row grid -- ? ) [let
-    col row grid sight-lines [ [ first2 grid height ] map ] map :> neighbor-heights
-    col row grid height :> this-height
-    neighbor-heights .
-    this-height .
-    neighbor-heights [ [ this-height < ] all? ] any?
+:: coord-heights ( coords grid -- n ) coords [ first2 grid height ] map ;
+:: visible-trees ( line height -- n ) [let
+    line [ height >= ] find drop :> furthest-visible
+    line length :> all-trees
+    furthest-visible [ furthest-visible 1 + ] [ all-trees ] if
 ] ;
 
-: part-one ( seq -- n )
-    command ! parse
-    dup . ! print for debugging
-    V{ } [ process ] reduce first ! convert to a filesystem tree
-    flatten ! get all the files and directories
-    [ dir? ] filter ! get only directories
-    [ size ] map ! get sizes
-    [ 100000 <= ] filter ! find small directories
-    sum ;
-: part-two ( seq -- n ) 
-    command ! parse
-    dup . ! print for debugging
-    V{ } [ process ] reduce first ! convert to a filesystem tree
-    [| fs |
-        [let
-            70000000 fs size - :> available
-            30000000 available - :> required
-            fs flatten [ dir? ] filter :> dirs
-            dirs [ size ] map [ required >= ] filter infimum
-        ]
-    ] call ;
+:: scenic-score ( col row grid -- n ) [let
+    col row grid height :> this-height
+    col row grid sight-lines [ grid coord-heights ] map 
+    [ this-height visible-trees ] map product
+] ;
 
-:: solve ( day input -- ) day input filename utf8 file-lines dup . dup
+MEMO: max-north ( col row grid -- n )
+    [| col row grid | col row 1 - grid [ height ] [ max-north ] 3bi max ] -1 if-in-grid ;
+
+MEMO: max-south ( col row grid -- n )
+    [| col row grid |  col row 1 + grid [ height ] [ max-south ] 3bi max ] -1 if-in-grid ;
+
+MEMO: max-east ( col row grid -- n )
+    [| col row grid |  col 1 + row grid [ height ] [ max-east ] 3bi max ] -1 if-in-grid ;
+
+MEMO: max-west ( col row grid -- n )
+    [| col row grid |  col 1 - row grid [ height ] [ max-west ] 3bi max ] -1 if-in-grid ;
+
+: min-to-edge ( col row grid -- n )
+    [ [ max-north ] [ max-south ] [ max-east ] [ max-west ] ] 3cleave 4array infimum ;
+
+: visible? ( col row grid -- ? ) [ min-to-edge ] [ height ] 3bi < ;
+:: solve-part-one ( grid -- n ) 
+    0 grid height>> [a,b)
+    0 grid width>> [a,b)
+    [ swap grid visible? ]
+    cartesian-map
+    concat
+    sift
+    length ;
+
+:: solve-part-two ( grid -- n ) 
+    0 grid height>> [a,b)
+    0 grid width>> [a,b)
+    [ swap grid scenic-score ]
+    cartesian-map
+    concat
+    supremum ;
+
+: part-one ( seq -- n )
+    <grid>
+    solve-part-one ;
+: part-two ( seq -- n ) 
+    <grid>
+    solve-part-two ;
+
+: solve ( day input -- ) filename utf8 file-contents dup
     part-one . part-two . ;
 
 : main ( -- ) "day8" "input.txt" solve ;
