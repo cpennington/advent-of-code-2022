@@ -2,7 +2,7 @@
 
 USING: kernel sequences prettyprint io.files
     io.encodings.utf8 splitting parser sorting math.order math
-    locals advent.tools sets grouping accessors math.ranges
+    locals advent.tools sets grouping accessors ranges
     vectors strings peg.ebnf multiline assocs peg combinators
     memoize arrays ;
 IN: advent.day8
@@ -21,10 +21,10 @@ TUPLE: grid map { height integer } { width integer } ;
     [ default ]
     if ;
 : height ( col row grid -- n ) [ map>> nth nth parse-digit ] -1 if-in-grid ;
-:: look-north ( col row grid -- seq ) col 0 (a,b] [ row 2array ] map ;
-:: look-south ( col row grid -- seq ) col grid width>> (a,b) [ row 2array ] map ;
-:: look-east ( col row grid -- seq ) row 0 (a,b] [ col swap 2array ] map ;
-:: look-west ( col row grid -- seq ) row grid height>> (a,b) [ col swap 2array ] map ;
+:: look-north ( col row grid -- seq ) col 0 (a..b] [ row 2array ] map ;
+:: look-south ( col row grid -- seq ) col grid width>> (a..b) [ row 2array ] map ;
+:: look-east ( col row grid -- seq ) row 0 (a..b] [ col swap 2array ] map ;
+:: look-west ( col row grid -- seq ) row grid height>> (a..b) [ col swap 2array ] map ;
 : sight-lines ( col row grid -- seq ) {
     [ look-north ]
     [ look-south ]
@@ -62,8 +62,8 @@ MEMO: max-west ( col row grid -- n )
 
 : visible? ( col row grid -- ? ) [ min-to-edge ] [ height ] 3bi < ;
 :: solve-part-one ( grid -- n ) 
-    0 grid height>> [a,b)
-    0 grid width>> [a,b)
+    0 grid height>> [a..b)
+    0 grid width>> [a..b)
     [ swap grid visible? ]
     cartesian-map
     concat
@@ -71,8 +71,8 @@ MEMO: max-west ( col row grid -- n )
     length ;
 
 :: solve-part-two ( grid -- n ) 
-    0 grid height>> [a,b)
-    0 grid width>> [a,b)
+    0 grid height>> [a..b)
+    0 grid width>> [a..b)
     [ swap grid scenic-score ]
     cartesian-map
     concat

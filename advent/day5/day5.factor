@@ -2,8 +2,8 @@
 
 USING: kernel sequences prettyprint io.files
     io.encodings.utf8 splitting parser sorting math.order math
-    locals advent.tools sets grouping accessors math.ranges
-    vectors strings ;
+    locals advent.tools sets grouping accessors math
+    vectors strings ranges ;
 IN: advent.day5
 
 TUPLE: puzzle init steps stacks ;

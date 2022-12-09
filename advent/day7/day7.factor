@@ -2,7 +2,7 @@
 
 USING: kernel sequences prettyprint io.files
     io.encodings.utf8 splitting parser sorting math.order math
-    locals advent.tools sets grouping accessors math.ranges
+    locals advent.tools sets grouping accessors math
     vectors strings peg.ebnf multiline assocs peg combinators
     memoize arrays ;
 IN: advent.day7
