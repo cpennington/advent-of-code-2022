@@ -5,7 +5,7 @@ IN: advent.day9.tests
 { f } [ 1 1 <vec2> should-tail-move? ] unit-test
 { t } [ 2 0 <vec2> should-tail-move? ] unit-test
 
-: final-tail ( str -- x y ) >array 0rope [ move-rope ] accumulate* last tail>> [ x>> ] [ y>> ] bi ;
+: final-tail ( str -- x y ) >array 0arope [ move-arope ] accumulate* last last [ x>> ] [ y>> ] bi ;
 { 0 0 } [ "U" final-tail ] unit-test
 { 0 1 } [ "UU" final-tail ] unit-test
 { 1 1 } [ "URU" final-tail ] unit-test
@@ -44,7 +44,7 @@ IN: advent.day9.tests
 
 
 { 13 } [ "day9" "sample.txt" filename utf8 file-lines part-one ] unit-test
-{ 13 } [ "day9" "sample.txt" filename utf8 file-lines part-two ] unit-test
+{ 1 } [ "day9" "sample.txt" filename utf8 file-lines part-two ] unit-test
 
 : main ( -- ) "advent.day9" test ;
 

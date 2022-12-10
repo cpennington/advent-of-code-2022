@@ -14,6 +14,8 @@ TUPLE: rope { head vec2 } { tail vec2 } ;
 : <rope> ( head tail -- rope ) rope boa ;
 
 : 0rope ( -- rope ) 0 0 <vec2> 0 0 <vec2> <rope> ;
+: 0arope ( -- arope ) 0 0 <vec2> 0 0 <vec2> 2array ;
+: nrope ( n -- arope ) [ 0 0 <vec2> ] replicate ;
 
 : parse-digit ( char -- n ) CHAR: 0 - ;
 :: bin-op ( x y p -- n ) x y [ [ x>> ] bi@ p call( n n -- n ) ] [ [ y>> ] bi@ p call( n n -- n ) ] 2bi <vec2> ; inline
@@ -37,12 +39,16 @@ TUPLE: rope { head vec2 } { tail vec2 } ;
     dup ! save the head
     rope tail>> move-tail ! move the tail
     <rope> ;
+:: move-arope ( seq dir -- seq )
+    seq first dir move-head ! move the head
+    dup ! save the head
+    seq rest swap [ move-tail ] accumulate* ! move the tail
+    swap prefix ;
 
-: move-seq ( command -- seq ) [ first 1array ] [ last parse-digit ] bi repeat ;
-    
+: move-seq ( command -- seq ) [ first 1array ] [ rest rest parse-number ] bi repeat ;
 
-: part-one ( seq -- n ) [ move-seq ] map concat 0rope [ move-rope ] accumulate* [ tail>> ] map members length ;
-: part-two ( seq -- n ) ;
+: part-one ( seq -- n ) [ move-seq ] map concat 2 nrope [ move-arope ] accumulate* [ last ] map members length ;
+: part-two ( seq -- n ) [ move-seq ] map concat 10 nrope [ move-arope ] accumulate* [ last ] map members length ;
 
 : solve ( day input -- ) filename utf8 file-lines dup
     part-one . part-two . ;
