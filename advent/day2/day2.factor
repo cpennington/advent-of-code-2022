@@ -17,12 +17,12 @@ IN: advent.day2
     x y p2-win-score
     x y p2-play-score
     + ;
-:: target-to-play ( x y -- x z ) x y p2-play 1 - x p1-play + 3 + 3 mod "XYZ" nth ;
+:: target-to-play ( x y -- x z ) x y p2-play 1 - x p1-play + 3 rem "XYZ" nth ;
 
 : part-one ( seq -- n ) [ parse-game p2-score ] map sum ;
 : part-two ( seq -- n ) [ parse-game target-to-play p2-score ] map sum ;
 
-:: solve ( day input -- ) day input filename load-input dup
+:: solve ( day input -- ) day input filename line-input dup
     part-one . part-two . ;
 
 : main ( -- ) "day2" "input.txt" solve ;

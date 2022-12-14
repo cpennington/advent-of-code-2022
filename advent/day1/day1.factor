@@ -14,7 +14,7 @@ IN: advent.day1
 : part-one ( seq -- n ) backpack-items backpack-totals supremum ;
 : part-two ( seq -- n ) backpack-items backpack-totals [ >=< ] sort first3 + + ;
 
-:: solve ( day input -- ) day input filename load-input dup
+:: solve ( day input -- ) day input filename line-input dup
     part-one . part-two . ;
 
 : main ( -- ) "day1" "input.txt" solve ;

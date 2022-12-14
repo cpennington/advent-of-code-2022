@@ -7,8 +7,8 @@ IN: advent.day3.tests
 
 { "a" } [ "aBCabc" in-both-compartments ] unit-test
 
-{ 157 } [ "day3" "sample.txt" filename load-input part-one ] unit-test
-{ 70 } [ "day3" "sample.txt" filename load-input part-two ] unit-test
+{ 157 } [ "day3" "sample.txt" filename line-input part-one ] unit-test
+{ 70 } [ "day3" "sample.txt" filename line-input part-two ] unit-test
 
 : main ( -- ) "advent.day3" test ;
 

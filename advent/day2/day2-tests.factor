@@ -40,8 +40,8 @@ IN: advent.day2.tests
 { CHAR: C CHAR: Z } [ "C Y" parse-game target-to-play ] unit-test
 { CHAR: C CHAR: X } [ "C Z" parse-game target-to-play ] unit-test
 
-{ 15 } [ "day2" "sample.txt" filename load-input part-one ] unit-test
-{ 12 } [ "day2" "sample.txt" filename load-input part-two ] unit-test
+{ 15 } [ "day2" "sample.txt" filename line-input part-one ] unit-test
+{ 12 } [ "day2" "sample.txt" filename line-input part-two ] unit-test
 
 : main ( -- ) "advent.day2" test ;
 

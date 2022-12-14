@@ -19,7 +19,7 @@ TUPLE: range { start integer read-only } { end integer read-only } ;
 : part-one ( seq -- n ) [ parse-pairs either-contained 1 0 ? ] map sum ;
 : part-two ( seq -- n ) [ parse-pairs overlaps 1 0 ? ] map sum ;
 
-:: solve ( day input -- ) day input filename load-input dup
+:: solve ( day input -- ) day input filename line-input dup
     part-one . part-two . ;
 
 : main ( -- ) "day4" "input.txt" solve ;

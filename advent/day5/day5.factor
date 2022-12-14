@@ -60,7 +60,7 @@ TUPLE: command amount from to ;
 : part-one ( seq -- n ) initialize-puzzle [ move-boxes ] run-steps stack-tops ;
 : part-two ( seq -- n ) initialize-puzzle [ move-box-batch ] run-steps stack-tops ;
 
-:: solve ( day input -- ) day input filename load-input dup
+:: solve ( day input -- ) day input filename line-input dup
     part-one . part-two . ;
 
 : main ( -- ) "day5" "input.txt" solve ;

@@ -4,7 +4,7 @@ USING: kernel sequences prettyprint io.files
     io.encodings.utf8 splitting parser sorting math.order math
     locals advent.tools sets grouping accessors ranges
     vectors strings peg.ebnf multiline assocs peg combinators
-    memoize arrays sequences.repeating math.functions ;
+    memoize arrays sequences.repeating math.functions io ;
 IN: advent.day10
 
 : noop-cycles ( cur instruction -- cycles ) drop 1array ;
@@ -19,7 +19,7 @@ IN: advent.day10
 
 : pixel-on? ( pixel signal -- ? ) - [-1,1]? ;
 : pixel-value ( pixel signal -- b ) pixel-on? CHAR: # 32 ? ;
-: scan-value ( ix signal -- b ) 40 mod swap pixel-value ;
+: scan-value ( ix signal -- b ) 40 rem swap pixel-value ;
 : display ( cycles -- str ) [ scan-value ] map-index 40 group "\n" join ;
 
 : part-one ( seq -- n ) 1 code-cycles 20 220 40 <range> signal-strength ;

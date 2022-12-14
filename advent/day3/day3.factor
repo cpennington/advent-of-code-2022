@@ -14,7 +14,7 @@ IN: advent.day3
 : part-one ( seq -- n ) [ in-both-compartments first priority ] map sum ;
 : part-two ( seq -- n ) 3 group [ first3 intersect intersect first priority ] map sum ;
 
-:: solve ( day input -- ) day input filename load-input dup
+:: solve ( day input -- ) day input filename line-input dup
     part-one . part-two . ;
 
 : main ( -- ) "day3" "input.txt" solve ;
